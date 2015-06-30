@@ -1,0 +1,43 @@
+<!--**
+* Notes:
+* This tempalte defines our chapter template
+*
+We begin with a list item with the ng-repeat annotation. Think of this as a ForEach loop in
+JavaScript. It's expecting a list of chapters in our $scope, and hopefully each chapter has a title
+and a summary, because we're showing those on the next two lines.
+*
+After that we show a couple of HTML links (with a little AngularJS enhancement, as usual).
+Remember how our routes are set up: the first link will reload ChaptersController with
+chapterId of the current chapter (we're in a loop, so we'll make one of these links for each
+chapter). The second, about five lines later, will take us to AddNoteController with the
+addNote template, which we'll look at in a moment.
+*
+After that, we have another ng-repeat for the notes of the current chapter. We're using an
+ng-show annotation (like an if conditional) to only show the notes if the current chapterId
+in our outer loop matches $scope.selectedChapterId, and if we are showing notes,
+we'll print the ID and content of each one, and add a link that will call $scope.onDelete()
+when clicked.
+*
+-->
+<ul>
+  <li ng-repeat='chapter in chapters | orderBy:"title"'>
+    <h2>{{chapter.title}}</h2>
+    <p>{{chapter.summary}}</p>
+    <p>
+      <a href='#/chapter/{{chapter.id}}'>
+        {{chapter.notes.length}}
+        <span ng-show='chapter.notes.length == 1'>note</span>
+        <span ng-hide='chapter.notes.length == 1'>notes</span>
+      </a>
+      |
+      <a href='#/addNote/{{chapter.id}}'>add note</a>
+    </p>
+    <ul>
+      <li ng-repeat='note in chapter.notes | orderBy:"id"'>
+        <div>{{$index}}</div>
+        <div><a href ng-click='onDelete(note.id)'>delete</a></div>
+        <p>{{note.content}}</p>
+      </li>
+    </ul>
+  </li>
+</ul>
